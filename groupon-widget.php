@@ -21,8 +21,12 @@ Author URI: http:://grouponwidget.com/about
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
 // **********************************************************************
 define(GROUPON_API_PATH, "http://groupon.com/api/v1/");
-add_action('admin_menu', 'groupon_widget_menu');
-add_action( 'admin_init', 'register_groupon_widget_settings' );
+require_once("groupon.widget.class.php");
+
+
+function groupon_widget_init() {
+	register_widget('GrouponWidget');
+}
 
 function groupon_time_left($expires){
   $difference = (strtotime($expires) - time());
@@ -53,8 +57,8 @@ function register_groupon_widget_settings() {
 function groupon_widget_head_admin() {
 	$groupon_widget_admin_stylesheet = WP_PLUGIN_URL . '/groupon-widget/admin_style.css';
 	$groupon_widget_stylesheet = WP_PLUGIN_URL . '/groupon-widget/widget.css';
-  wp_register_style('groupon_widget_admin_styles', $groupon_widget_admin_stylesheet);
-  wp_register_style('groupon_widget_styles', $groupon_widget_stylesheet);
+  wp_register_style('groupon_widget_admin_styles', $groupon_widget_admin_stylesheet, array(), "1.0");
+  wp_register_style('groupon_widget_styles', $groupon_widget_stylesheet, array(), "1.0");
   wp_enqueue_style('groupon_widget_admin_styles');
   wp_enqueue_style('groupon_widget_styles');
   wp_enqueue_script('jquery');
@@ -64,6 +68,12 @@ function groupon_widget_head_admin() {
 
 function groupon_widget_options() {
   include("admin_form.php");
+}
+
+function groupon_render_widget($city){
+  $deal = groupon_get_deal_for($city);
+  $time_left = groupon_time_left($deal->end_date);
+  include("widget.php");
 }
 
 function groupon_get_deal_for($city){
@@ -89,5 +99,11 @@ function groupon_format_price($price){
   $price = "$" . $price;
   return $price;
 }
+
+
+add_action('admin_menu', 'groupon_widget_menu');
+add_action( 'admin_init', 'register_groupon_widget_settings' );
+add_action('widgets_init', 'groupon_widget_init');
+add_action('wp_print_styles', array('GrouponWidget', 'loadStylesheet'));
 
 ?>
