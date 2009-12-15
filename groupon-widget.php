@@ -23,6 +23,7 @@ Author URI: http:://grouponwidget.com/about
 define(GROUPON_API_PATH, "http://groupon.com/api/v1/");
 require_once("groupon.widget.class.php");
 
+echo strftime("%c %I", time());
 
 function groupon_widget_init() {
 	register_widget('GrouponWidget');
@@ -81,6 +82,12 @@ function groupon_get_deal_for($city){
   return $response->deals[0];
 }
 
+function groupon_get_divisions() {
+  $response = json_decode(groupon_do_request(GROUPON_API_PATH . "divisions.json"));
+  echo GROUPON_API_PATH . "divisions.json";
+  return $response->divisions;
+}
+
 function groupon_do_request($url){
   $c = curl_init();
   curl_setopt($c, CURLOPT_RETURNTRANSFER, 1);
@@ -100,10 +107,31 @@ function groupon_format_price($price){
   return $price;
 }
 
+function groupon_request_handler() {
+	global $wpdb;
+	if (!empty($_GET['grpn_action'])) {
+		switch($_GET['grpn_action']) {
+			case 'render_widget':
+				groupon_render_widget($_GET['division']);
+				die();
+				break;
+		}
+	}
+}
+
+
+function groupon_load_js_vars() {
+  echo "<script type='text/javascript'>";
+  echo "GRPN_WP_URL = '" . get_bloginfo('wpurl') . "'";
+  echo "</script>";
+  
+}
 
 add_action('admin_menu', 'groupon_widget_menu');
-add_action( 'admin_init', 'register_groupon_widget_settings' );
+add_action('admin_init', 'register_groupon_widget_settings' );
 add_action('widgets_init', 'groupon_widget_init');
 add_action('wp_print_styles', array('GrouponWidget', 'loadStylesheet'));
+add_action('wp_print_scripts', 'groupon_load_js_vars');
+add_action('init', 'groupon_request_handler', 10);
 
 ?>

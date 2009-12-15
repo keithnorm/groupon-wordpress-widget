@@ -11,11 +11,40 @@ jQuery(function () {
 			},
 			color: jQuery(this).val()
 		});
-	console.log(jQuery('.colorpick'));
+		
+		
+	jQuery('#grpn_division_select').change(function(e){
+	  jQuery.get(GRPN_WP_URL + "/index.php", {"grpn_action": "render_widget", "division" : jQuery(e.target).val()}, function(response){
+	    jQuery("#preview-content").html(response);
+	    grouponUpdatePreview();
+	  })
+	});
+	
+	grouponUpdatePreview();
 });
 
 function formatDateForParse(date){
   date.replace(/-/g, '/').replace(/Z$/, "").split("T").join(" ");
+}
+
+function grouponUpdatePreview() {
+  var obj = {"#link_color" : ".groupon_widget_text_link",
+  "#text_color" : ".groupon_widget_text",
+  "#header_footer_color" : "#groupon_widget",
+  "#title_color" : "#groupon_widget h1",
+  "#get_it_color" : "#groupon_widget #get_it",
+  "#price_tag_color" : "#price_tag, #triangle"};
+  
+  var formToFuncMappings = {"#link_color" : "update_link_color",
+  "#text_color" : "update_text_color",
+  "#header_footer_color" : "update_widget_background",
+  "#title_color" : "update_title",
+  "#get_it_color" : "update_get_it_button",
+  "#price_tag_color" : "update_price_tag"};
+  
+  for(var field in formToFuncMappings) {
+    this[formToFuncMappings[field]].call(this, jQuery(field).val());
+  }
 }
 
 

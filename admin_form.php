@@ -49,33 +49,11 @@
     		</tr>
     		<tr valign="top">
     		  <th><label for="link-color">daily deal for</label></th>
-    			<td><select name="city">
+    			<td><select id="grpn_division_select" name="city">
     					<option disabled="disabled" selected="selected">-- Select a city --</option>
-    					<option value="austin">Austin</option>
-    					<option value="baltimore">Baltimore</option>
-    					<option value="boston">Boston</option>
-    					<option value="charlotte">Charlotte</option>
-    					<option value="chicago">Chicago</option>
-
-    					<option value="dallas">Dallas</option>
-    					<option value="denver">Denver</option>
-    					<option value="houston">Houston</option>
-    					<option value="los-angeles">Los Angeles</option>
-
-    					<option value="miami">Miami</option>
-    					<option value="minneapolis-stpaul">Minneapolis / St Paul</option>
-    					<option value="nashville">Nashville</option>
-    					<option value="new-york">New York</option>
-    					<option value="philadelphia">Philadelphia</option>
-    					<option value="phoenix">Phoenix</option>
-
-    					<option value="portland">Portland</option>
-    					<option value="san-diego">San Diego</option>
-    					<option value="san-francisco">San Francisco</option>
-    					<option value="seattle">Seattle</option>
-    					<option value="stlouis">St Louis</option>
-    					<option value="tampa">Tampa</option>
-    					<option value="washington-dc">Washington DC</option>
+    					<?php foreach(groupon_get_divisions() as $division) : ?>
+    					  <option value="<?= $division->id; ?>"><?= $division->name; ?></option>
+    					<?php endforeach; ?>
     				</select>
     				</td>
     		</tr>
