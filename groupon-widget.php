@@ -23,7 +23,16 @@ Author URI: http:://grouponwidget.com/about
 define(GROUPON_API_PATH, "http://groupon.com/api/v1/");
 require_once("groupon.widget.class.php");
 
-echo strftime("%c %I", time());
+add_option("grpn_wdgt_link_color", "0981b3");
+add_option("grpn_wdgt_text_color", "000000");
+add_option("grpn_wdgt_shell_background", "7fb93c");
+add_option("grpn_wdgt_title_color", "ffffff");
+add_option("grpn_wdgt_get_it_btn_background", "7fb93c");
+add_option("grpn_wdgt_price_tag_background", "67d6f2");
+add_option("grpn_wdgt_width", "296");
+add_option("grpn_wdgt_rounded", "1");
+add_option("grpn_wdgt_city", "chicago");
+add_option("grpn_wdgt_referral_code", "");
 
 function groupon_widget_init() {
 	register_widget('GrouponWidget');
@@ -56,8 +65,9 @@ function register_groupon_widget_settings() {
 }
 
 function groupon_widget_head_admin() {
+  $theme_query_string = http_parse_query(groupon_build_theme_array());
 	$groupon_widget_admin_stylesheet = WP_PLUGIN_URL . '/groupon-widget/admin_style.css';
-	$groupon_widget_stylesheet = WP_PLUGIN_URL . '/groupon-widget/widget.css';
+	$groupon_widget_stylesheet = WP_PLUGIN_URL . '/groupon-widget/widget.css.php?' . $theme_query_string;
   wp_register_style('groupon_widget_admin_styles', $groupon_widget_admin_stylesheet, array(), "1.0");
   wp_register_style('groupon_widget_styles', $groupon_widget_stylesheet, array(), "1.0");
   wp_enqueue_style('groupon_widget_admin_styles');
@@ -65,10 +75,24 @@ function groupon_widget_head_admin() {
   wp_enqueue_script('jquery');
   wp_enqueue_script('jquery-colorpicker', WP_PLUGIN_URL . '/groupon-widget/javascripts/colorpicker.js');
   wp_enqueue_script('groupon_widget_form', WP_PLUGIN_URL . '/groupon-widget/javascripts/admin_form.js');
+  wp_enqueue_script('groupon_widget', WP_PLUGIN_URL . '/groupon-widget/javascripts/widget.js');
 }
 
 function groupon_widget_options() {
   include("admin_form.php");
+}
+
+function groupon_settings_process() {
+  register_setting("groupon-widget", "grpn_wdgt_link_color");
+  register_setting("groupon-widget", "grpn_wdgt_text_color");
+  register_setting("groupon-widget", "grpn_wdgt_shell_background");
+  register_setting("groupon-widget", "grpn_wdgt_title_color");
+  register_setting("groupon-widget", "grpn_wdgt_get_it_btn_background");
+  register_setting("groupon-widget", "grpn_wdgt_price_tag_background");
+  register_setting("groupon-widget", "grpn_wdgt_width");
+  register_setting("groupon-widget", "grpn_wdgt_rounded");
+  register_setting("groupon-widget", "grpn_wdgt_city");
+  register_setting("groupon-widget", "grpn_wdgt_referral_code"); 
 }
 
 function groupon_render_widget($city){
@@ -127,11 +151,51 @@ function groupon_load_js_vars() {
   
 }
 
+function groupon_build_theme_array() {
+  $opts = array();
+  foreach(groupon_theme_options() as $option){
+    $opts[$option] = get_option($option);
+  }
+  return $opts;
+}
+
+function groupon_theme_options() {
+  return array("grpn_wdgt_link_color", "grpn_wdgt_text_color", "grpn_wdgt_shell_background", "grpn_wdgt_title_color",
+              "grpn_wdgt_get_it_btn_background", "grpn_wdgt_price_tag_background", "grpn_wdgt_width",
+              "grpn_wdgt_rounded", "grpn_wdgt_city", "grpn_wdgt_referral_code");
+}
+
+function http_parse_query( $array = NULL, $convention = '%s' ){  
+  if( count( $array ) == 0 ) {
+    return '';
+  } 
+  else {
+    if(function_exists( 'http_build_query' )) {
+      $query = http_build_query( $array );
+    } 
+    else {
+      $query = '';
+      foreach( $array as $key => $value ){
+        if( is_array( $value ) ){
+          $new_convention = sprintf( $convention, $key ) . '[%s]';
+          $query .= http_parse_query( $value, $new_convention );
+        } 
+        else {
+          $key = urlencode( $key );
+          $value = urlencode( $value );      
+          $query .= sprintf( $convention, $key ) . "=$value&";                        
+        }
+      }   
+    }
+  return $query;       
+  }       
+}
+
 add_action('admin_menu', 'groupon_widget_menu');
 add_action('admin_init', 'register_groupon_widget_settings' );
 add_action('widgets_init', 'groupon_widget_init');
 add_action('wp_print_styles', array('GrouponWidget', 'loadStylesheet'));
 add_action('wp_print_scripts', 'groupon_load_js_vars');
 add_action('init', 'groupon_request_handler', 10);
-
+add_action('admin_init', 'groupon_settings_process');
 ?>

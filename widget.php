@@ -1,6 +1,6 @@
-<div id="groupon_widget" class="rounded_on">
+<div id="groupon_widget" <?php if(get_option("grpn_wdgt_rounded")) echo 'class="rounded_on"'; ?>>
     <h1>Daily Deal in <span><?= $deal->division_name; ?></span></h1>
-    <div id="groupon_box" class="rounded_on">
+    <div id="groupon_box" <?php if(get_option("grpn_wdgt_rounded")) echo 'class="rounded_on"'; ?>>
       <h2><a href="" class="groupon_widget_text_link"><?= $deal->title; ?></a></h2>
       <div id="left">
         <div id="price_tag_wrap">
@@ -36,10 +36,10 @@
         </table>
         <table id="time_left" class="bold">
           <tr>
-            <td class="groupon_widget_text number"><?= $time_left["days"]; ?></td>
-            <td class="groupon_widget_text number"><?= $time_left["hours"]; ?></td>
-            <td class="groupon_widget_text number"><?= $time_left["minutes"]; ?></td>
-            <td class="groupon_widget_text number"><?= $time_left["seconds"]; ?></td>
+            <td class="groupon_widget_text number" id="grpn_days_remaining"><?= $time_left["days"]; ?></td>
+            <td class="groupon_widget_text number" id="grpn_hours_remaining"><?= $time_left["hours"]; ?></td>
+            <td class="groupon_widget_text number" id="grpn_minutes_remaining"><?= $time_left["minutes"]; ?></td>
+            <td class="groupon_widget_text number" id="grpn_seconds_remaining"><?= $time_left["seconds"]; ?></td>
           </tr>
           <tr>
             <td class="groupon_widget_text label">D</td>
@@ -65,5 +65,7 @@
   <div id="grpn_wdgt_footer">
     <a class="rounded_on groupon_widget_text_link" href="">Get this widget, get money!</a>
   </div>
-
+  <script type="text/javascript">
+    GRPN.currentWidgetCountdown = new GRPN.countdown({targetDate: <?php echo strtotime($deal->end_date) * 1000; ?>}).start();
+  </script>
 </div>
