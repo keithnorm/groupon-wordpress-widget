@@ -95,14 +95,21 @@ function groupon_settings_process() {
   register_setting("groupon-widget", "grpn_wdgt_referral_code"); 
 }
 
-function groupon_render_widget($city){
-  $deal = groupon_get_deal_for($city);
+function groupon_render_widget($params){
+  $deal = groupon_get_deal_for($params);
   $time_left = groupon_time_left($deal->end_date);
   include("widget.php");
 }
 
-function groupon_get_deal_for($city){
-  $response = json_decode(groupon_do_request(GROUPON_API_PATH . $city . "/deals.json"));
+function groupon_get_deal_for($params){
+  if(isset($params['city']) && $params['city'] != 'Auto-detect') {
+    $url = GROUPON_API_PATH . $params['city'] . "/deals.json";
+  }
+  else{
+    $geo = groupon_widget_get_geo_from_ip();
+    $url = GROUPON_API_PATH . "/deals.json?lat={$geo['lat']}&lng={$geo['lng']}";
+  }
+  $response = json_decode(groupon_do_request($url));
   return $response->deals[0];
 }
 
@@ -136,7 +143,7 @@ function groupon_request_handler() {
 	if (!empty($_GET['grpn_action'])) {
 		switch($_GET['grpn_action']) {
 			case 'render_widget':
-				groupon_render_widget($_GET['division']);
+				groupon_render_widget(array("city" => $_GET['division']));
 				die();
 				break;
 		}
@@ -189,6 +196,23 @@ function http_parse_query( $array = NULL, $convention = '%s' ){
     }
   return $query;       
   }       
+}
+
+function groupon_widget_get_geo_from_ip() {
+  $query = 'select Latitude,Longitude from ip.location where ip = "' . groupon_widget_get_visitor_ip() . '"';
+  $yqlGeo = 'http://query.yahooapis.com/v1/public/yql?q=' . urlencode($query) . '&format=json&env=' . urlencode('store://datatables.org/alltableswithkeys');
+  $json = json_decode(file_get_contents($yqlGeo));
+  $geo = $json->query->results->Response;
+  $latlng = array("lat" => $geo->Latitude, "lng" => $geo->Longitude);
+  return $latlng;
+}
+
+function groupon_widget_get_visitor_ip() { 
+  if(isset($_SERVER['HTTP_X_FORWARDED_FOR']))
+    $theIp=$_SERVER['HTTP_X_FORWARDED_FOR'];
+  else 
+    $theIp=$_SERVER['REMOTE_ADDR'];
+  return trim($theIp);
 }
 
 add_action('admin_menu', 'groupon_widget_menu');

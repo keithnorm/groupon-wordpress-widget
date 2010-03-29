@@ -112,16 +112,19 @@
 #groupon_widget #price_tag_wrap{
   float: left;
   overflow: hidden;
+  position: relative;
 }
 
 #groupon_widget #price_tag_wrap #triangle{
-  float: left;
-  font-size: 0px; line-height: 0%; width: 0px;
+  font-size: 0px; line-height: 0%;
+  width: 0;
   border-top: 16px solid #fff;
   border-bottom: 16px solid #fff;
   border-left: 1px solid #fff;
   border-right: 11px solid #<?php echo $_GET["grpn_wdgt_price_tag_background"]; ?>;
   position:relative;
+  float: left;
+  z-index: 10;
 }
 
 #groupon_widget #price_tag_wrap #triangle #hole{
@@ -133,15 +136,21 @@
 }
 
 #groupon_widget #price_tag_wrap #price_tag{
-  float: left;
   background: #<?php echo $_GET["grpn_wdgt_price_tag_background"]; ?>;
-  width: 77px;
+  width: 96px;
   height: 33px;
+  position: relative;
+  left: 12px;
+  z-index: 9;
+}
+
+#groupon_widget #price_tag h2 {
   color: #fff;
   font-weight:700;
   font-size:24px;
-  line-height:37px;
-  padding-left:25px;
+  line-height:30px;
+  padding: 0 0 0 10px;
+  margin: 0;
 }
 
 #groupon_widget table{

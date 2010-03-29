@@ -52,7 +52,7 @@
     		  <th><label for="link-color">daily deal for</label></th>
     		  <?php $selected_division = get_option("grpn_wdgt_city"); ?>
     			<td><select id="grpn_division_select" name="grpn_wdgt_city">
-    					<option disabled="disabled" selected="selected">-- Select a city --</option>
+    					<option selected="selected">Auto-detect</option>
     					<?php foreach(groupon_get_divisions() as $division) : ?>
     					  <option <?php if($division->id == $selected_division )  echo 'selected="selected"'; ?> value="<?= $division->id; ?>"><?= $division->name; ?></option>
     					<?php endforeach; ?>
@@ -78,7 +78,7 @@
     <div id="grpn_widget_preview">
       <div id="preview-top"></div>
 			<div id="preview-content">
-				<?php groupon_render_widget($selected_division); ?>
+				<?php groupon_render_widget(array("city" => $selected_division)); ?>
 				    
 			</div>
 			<div id="preview-bottom"></div>

@@ -7,7 +7,9 @@
           <div id="triangle">
           	<div id="hole"><img src="<?php echo WP_PLUGIN_URL; ?>/groupon-widget/images/hole.png"/></div>
           </div>
-          <div id="price_tag"><?= groupon_format_price($deal->price); ?></div>
+          <div id="price_tag">
+            <h2><?= groupon_format_price($deal->price); ?></h2>
+          </div>
         </div>
         <table id="breakdown">
           <tr>
