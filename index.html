@@ -7,6 +7,12 @@
 
 	<title>keithnorm/groupon-wordpress-widget @ GitHub</title>
 	<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">
+	<script src="http://www.groupon.com/javascripts/common/widget.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript" charset="utf-8">
+	  window.onload = function() {
+	    new GRPN.Widget({id: 'widget_container'}).render();
+	  }
+	</script>
 	
 </head>
 
@@ -25,20 +31,41 @@
 
     <h1><a href="http://github.com/keithnorm/groupon-wordpress-widget">Groupon Widget</a>
       <span class="small">by <a href="http://github.com/keithnorm">keithnorm</a></span></h1>
+      
+      <div class="screenshots text_center">
+        <div id="widget_container">
+          <img src="images/ss_widget.png">
+        </div>
+      </div>
 
-    <div class="description">
+    <h3 class="description">
       A widget ready wordpress plugin for displaying Groupon deals
-    </div>
+    </h3>
 
     <h2>Install</h2>
 <p>Copy the entire directory to your wp-content/plugins directory, then activate the plugin via the admin panel.</p>
+
+  <h2>Admin Options</h2>
+  <div class="screenshots">
+    <img src="images/ss_admin.png">
+  </div>
+
+<h2>Features</h2>
+<ul>
+  <li>Easy to install, drag and drop widget</li>
+  <li>Put in your referral code to get 10 Groupon bucks for each referral</li>
+  <li>Auto-locate and render the closest deal to the user using the auto-detect option under city select</li>
+  <li>Fully customize the colors to fit with your site</li>
+</ul>
+
 <h2>Authors</h2>
-<p>Keith Norman and Steven Walker
-<br/>
-<br/>      </p>
-<h2>Contact</h2>
-<p> keithnorm@gmail.com
-<br/>      </p>
+<ul>
+  <li>Development: <a href="http://twitter.com/keithnorm/">Keith Norman</a></li>
+  <li>Design: <a href="http://twitter.com/to_morrow">Steven Walker</a></li>
+</ul>
+<p>Also big thanks to <a href="http://twitter.com/mattloseke">Matt Loseke</a> for the HTML/CSS implementation on the <a href="http://groupon.com/widget">javascript version</a></p>
+<h2>Questions/Feedback?</h2>
+<p> Send me an email at <a href="mailto:keithnorm@gmail.com">keithnorm@gmail.com</a></p>
 
 
     <h2>Download</h2>

@@ -2,6 +2,8 @@ body {
 	margin-top: 1.0em;
 	background-color: #89B556;
   font-family: Helvetica, Arial, FreeSans;
+  font-size: 62.5%;
+  line-height: 1.8em;
 	color: #000000;
 }
 #container {
@@ -14,13 +16,25 @@ body {
   padding: 20px;
 }
 h1 { font-size: 3.8em; color: #590f6b; margin-bottom: 3px; }
-h1 .small { font-size: 0.4em; }
+h1 .small { font-size: 0.4em; line-height: 1em; }
 h1 a { text-decoration: none }
-h2 { font-size: 1.5em; color: #590f6b; }
-h3 { text-align: center; color: #590f6b; }
+h2 { font-size: 2em; color: #590f6b; }
+h3 { text-align: center; font-size: 1.4em; color: #590f6b; }
+p, li {
+  font-size: 1.4em;
+}
+p, ul {
+  margin-bottom: 20px;
+}
 a { color: #590f6b; }
-.description { font-size: 1.2em; margin-bottom: 30px; margin-top: 30px; font-style: italic;}
+.description { margin-bottom: 30px; margin-top: 30px; font-style: italic;}
 .download { float: right; }
-pre { background: #000; color: #fff; padding: 15px;}
+.screenshots {
+  clear: both;
+}
+pre { font-size: 1.8em; background: #000; color: #fff; padding: 15px;}
 hr { border: 0; width: 80%; border-bottom: 1px solid #aaa}
+.text_center {
+  text-align: center;
+}
 .footer { text-align:center; padding-top:30px; font-style: italic; }
